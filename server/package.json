@@ -12,6 +12,8 @@
   "dependencies": {
     "dotenv": "^16.0.2",
     "fs": "0.0.1-security",
+    "neo4j-driver": "^5.0.1",
+    "neode": "^0.4.8",
     "path": "^0.12.7",
     "restify": "^8.6.1"
   },

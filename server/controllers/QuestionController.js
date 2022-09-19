@@ -1,13 +1,13 @@
 'use strict'
 
 const {
-    Room
+    Question
 } = require('../models');
 
 const index = async (req, res, next) => {
     try {
         let page = req.query.page || 1; 
-        const resp = await Room.getAll(page);
+        const resp = await Question.getAll(page);
         res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message});
@@ -17,7 +17,7 @@ const index = async (req, res, next) => {
 const view = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const resp = await Room.getOne(id);
+        const resp = await Question.getOne(id);
         res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message });
@@ -27,7 +27,7 @@ const view = async (req, res, next) => {
 const create = async (req, res, next) => {
     try {
         const data = req.body;
-        const resp = await Room.create(data);
+        const resp = await Question.create(data);
         res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message });
@@ -38,7 +38,7 @@ const update = async (req, res, next) => {
     try {
         const id = req.params.id;
         const data = req.body;
-        const resp = await Room.update(id, data);
+        const resp = await Question.update(id, data);
         res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message });
@@ -48,7 +48,7 @@ const update = async (req, res, next) => {
 const remove = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const resp = await Room.remove(id);
+        const resp = await Question.remove(id);
         res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message });
@@ -56,7 +56,7 @@ const remove = async (req, res, next) => {
 }
 
 module.exports = {
-    nameResourse: 'room',
+    nameResourse: 'question',
     index,
     view,
     create,

@@ -2,7 +2,7 @@
 
 const instance = require('../config/db');
 
-const resourceName = 'Room';
+const resourceName = 'Answere';
 const rowsForPage = 25;
 
 const getOne = async (code) => {
