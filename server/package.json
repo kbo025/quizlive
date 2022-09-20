@@ -1,7 +1,7 @@
 {
-  "name": "backend-qualicorp",
+  "name": "backend-quizlive",
   "version": "1.0.0",
-  "description": "backend teste qualicopr ",
+  "description": "backend teste quizlive ",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

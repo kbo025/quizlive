@@ -8,7 +8,7 @@ const {
 
 const PORT = process.env.PORT || 3000;
 const server = restify.createServer({
-    name: 'qualitest',
+    name: 'quizlive',
     version: '1.0.0',
 });
 
