@@ -78,10 +78,26 @@ unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, 
 
 }
 
-button.primary {
-    color: #fff;
+small {
+    color: #97a4b1;
+}
+
+button.primary, button.accent {
     font-family: 'Montserrat';
-    background: #5468FF;
     border-radius: 16px;
     font-weight: 600;
+}
+
+.question {
+    font-family: 'Montserrat';
+    border-radius: 16px !important;
+    font-weight: 600;
+}
+
+
+.question  button.v-btn {
+    flex-direction: column;
+    font-family: 'Montserrat';
+    border-radius: 16px !important;
+    border-width: 1px;
 }

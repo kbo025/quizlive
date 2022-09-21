@@ -53,7 +53,7 @@ export default {
       themes: {
         light: {
           primary: '#5468FF',
-          accent: colors.grey.darken3,
+          accent: colors.blueGrey.darken1,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
