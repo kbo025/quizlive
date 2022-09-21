@@ -1,7 +1,8 @@
 'use strict';
 
-const restify = require('restify');
 require("dotenv").config({ path: '../.env' });
+const restify = require('restify');
+const RoonMiddleware = require('./middleware/RoomMiddleware');
 const {
     Room, Teacher, Student, Question, Option, Answer
 } = require('./controllers');
@@ -21,10 +22,10 @@ server.get('/api/hello', (req, resp, next) => {
 });
 
 server.get(`/api/${Room.nameResourse}`, Room.index);
-server.get(`/api/${Room.nameResourse}/:code`, Room.view);
+server.get(`/api/${Room.nameResourse}/:codeRoom`, Room.view);
 server.post(`/api/${Room.nameResourse}`, Room.create);
-server.put(`/api/${Room.nameResourse}/:code`, Room.update);
-server.del(`/api/${Room.nameResourse}/:code`, Room.remove);
+server.put(`/api/${Room.nameResourse}/:codeRoom`, Room.update);
+server.del(`/api/${Room.nameResourse}/:codeRoom`, Room.remove);
 
 server.get(`/api/${Room.nameResourse}/:codeRoom/${Teacher.nameResourse}`, Teacher.index);
 server.get(`/api/${Room.nameResourse}/:codeRoom${Teacher.nameResourse}/:code`, Teacher.view);
@@ -32,11 +33,31 @@ server.post(`/api/${Room.nameResourse}/:codeRoom${Teacher.nameResourse}`, Teache
 server.put(`/api/${Room.nameResourse}/:codeRoom${Teacher.nameResourse}/:code`, Teacher.update);
 server.del(`/api/${Room.nameResourse}/:codeRoom${Teacher.nameResourse}/:code`, Teacher.remove);
 
-server.get(`/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}`, Student.index);
-server.get(`/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}/:code`, Student.view);
-server.post(`/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}`, Student.create);
-server.put(`/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}/:code`, Student.update);
-server.del(`/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}/:code`, Student.remove);
+server.get(
+    `/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}`,
+    RoonMiddleware,
+    Student.index
+);
+server.get(
+    `/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}/:code`,
+    RoonMiddleware,
+    Student.view
+);
+server.post(
+    `/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}`,
+    RoonMiddleware,
+    Student.create
+);
+server.put(
+    `/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}/:code`,
+    RoonMiddleware,
+    Student.update
+);
+server.del(
+    `/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}/:code`,
+    RoonMiddleware,
+    Student.remove
+);
 
 server.get(`/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}/:codeStudent/${Answer.nameResourse}`, Answer.index);
 server.get(`/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}/:codeStudent/${Answer.nameResourse}/:code`, Answer.view);

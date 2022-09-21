@@ -7,7 +7,8 @@ const {
 const index = async (req, res, next) => {
     try {
         let page = req.query.page || 1; 
-        const resp = await Question.getAll(page);
+        const question = await Question.getAll(page);
+        const resp = await question.toJson();
         res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message});
@@ -17,7 +18,8 @@ const index = async (req, res, next) => {
 const view = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const resp = await Question.getOne(id);
+        const question = await Question.getOne(id);
+        const resp = await question.toJson();
         res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message });
@@ -27,7 +29,8 @@ const view = async (req, res, next) => {
 const create = async (req, res, next) => {
     try {
         const data = req.body;
-        const resp = await Question.create(data);
+        const question = await Question.create(data);
+        const resp = await question.toJson();
         res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message });
@@ -38,7 +41,8 @@ const update = async (req, res, next) => {
     try {
         const id = req.params.id;
         const data = req.body;
-        const resp = await Question.update(id, data);
+        const question = await Question.update(id, data);
+        const resp = await question.toJson();
         res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message });
@@ -48,8 +52,8 @@ const update = async (req, res, next) => {
 const remove = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const resp = await Question.remove(id);
-        res.json(resp);
+        const success = await Question.remove(id);
+        res.json({ success });
     } catch (e) {
         res.json(500, { success: false, message: e.message });
     }

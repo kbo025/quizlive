@@ -6,9 +6,7 @@ const resourceName = 'Room';
 const rowsForPage = 25;
 
 const getOne = async (code) => {
-    let result = await instance.first(resourceName, 'code', code);
-    const props = result.properties();
-    return props;
+    return await instance.first(resourceName, 'code', code);
 }
 
 const getAll = async (page) => {
@@ -18,16 +16,20 @@ const getAll = async (page) => {
 }
 
 const create = async (data) => {
-    const result = await instance.create(resourceName, data);
-    const props = result.properties();
-    return props;
+    return await instance.create(resourceName, data);
+}
+
+const createWithTeacher = async (dataRoom, dataTeacher) => {
+    const room = await instance.create(resourceName, dataRoom);
+    const teacher = await instance.create('Teacher', dataTeacher);
+    await room.relateTo(teacher, 'teacher');
+    return room;
 }
 
 const update = async (code, data) => {
-    let result = await instance.first(resourceName, 'code', code);
-    await result.update(data);
-    const props = result.properties();
-    return props;
+    let room = await instance.first(resourceName, 'code', code);
+    await room.update(data);
+    return room;
 }
 
 const remove = async (code) => {
@@ -40,5 +42,6 @@ module.exports = {
     getAll,
     create,
     update,
-    remove
+    remove,
+    createWithTeacher,
 }

@@ -19,8 +19,7 @@ const getAll = async (page) => {
 
 const create = async (data) => {
     const result = await instance.create(resourceName, data);
-    const props = result.properties();
-    return props;
+    return result;
 }
 
 const update = async (code, data) => {

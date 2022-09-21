@@ -6,28 +6,22 @@ const resourceName = 'Answere';
 const rowsForPage = 25;
 
 const getOne = async (code) => {
-    let result = await instance.first(resourceName, 'code', code);
-    const props = result.properties();
-    return props;
+    return await instance.first(resourceName, 'code', code);
 }
 
 const getAll = async (page) => {
     const offset = page ? (page * rowsForPage) - rowsForPage : 0;
-    const collection = await instance.all(resourceName, {}, {createdAt: 'DESC'}, rowsForPage, offset);
-    return await collection.toJson();
+    return await instance.all(resourceName, {}, {createdAt: 'DESC'}, rowsForPage, offset);
 }
 
 const create = async (data) => {
-    const result = await instance.create(resourceName, data);
-    const props = result.properties();
-    return props;
+    return await instance.create(resourceName, data);
 }
 
 const update = async (code, data) => {
-    let result = await instance.first(resourceName, 'code', code);
-    await result.update(data);
-    const props = result.properties();
-    return props;
+    let answer = await instance.first(resourceName, 'code', code);
+    await answer.update(data);
+    return answer;
 }
 
 const remove = async (code) => {
