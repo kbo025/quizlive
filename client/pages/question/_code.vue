@@ -8,18 +8,23 @@
           <h3>Agregue os dados da pergunta.</h3>
         </div>
         <div class="content">
+          <v-form ref="form" lazy-validation>
             <v-text-field
               label="Topico da pergunta"
-              v-model="topic"
+              v-model="form.topic"
+              :rules="rules.topic"
               outlined
             ></v-text-field>
             <v-text-field
               label="Valor (XP)"
-              v-model="value"
+              v-model="form.value"
+              :rules="rules.value"
               outlined
             ></v-text-field>
             <v-textarea
               label="Enunciado da Pergunta"
+              v-model="form.statement"
+              :rules="rules.statement"
               outlined
             ></v-textarea>
             <v-text-field
@@ -33,7 +38,7 @@
             <fieldset class="px-3 py-3">
                 <label for="">Opções:</label>
                 <v-divider></v-divider>
-                <v-radio-group v-model="rigthOption">
+                <v-radio-group v-model="form.rigthOption" :rules="rules.rigthOption">
                     <v-radio
                         v-for="item in options"
                         :key="item"
@@ -51,9 +56,11 @@
               class="my-3"
               color="primary"
               elevation="2"
+              @click="submitForm"
               large>
               Criar Pergunta
             </v-btn>
+          </v-form>
         </div>
       </v-col>
     </v-row>
@@ -65,14 +72,34 @@
     data: function() {
         return {
             addOption: null,
-            topic: null,
-            statemen: null,
-            value: 1,
-            rigthOption: null,
-            options: [
+            form: {
+              topic: null,
+              statement: null,
+              value: 1,
+              rigthOption: null,
+              options: [
                 'SIM',
                 'NÃO',
-            ]
+              ]
+            },
+            rules: {
+              topic: [
+                v => !!v || 'Requerido',
+              ],
+              statement: [
+                v => !!v || 'Requerido',
+              ],
+              value: [
+                v => !!v || 'Requerido',
+                v => (v && /^\d*$/.test(v) && parseInt(v) > 0 ) || 'Deve ser um número inteiro positivo',
+              ],
+              rigthOption: [ 
+                v => !!v || 'Deve escolher a opção correta',
+              ],
+              options: [
+                v => (Array.isArray(v) && v.length > 1 ) || 'Deve Agregar mais opções na pergunta',
+              ]
+            }
         }
     },
     methods: {
@@ -80,12 +107,15 @@
             if (!this.addOption || this.addOption == '') {
                 return;
             }
-            this.options.push(this.addOption);
+            this.form.options.push(this.addOption);
             this.addOption = null;
         },
         removeOptions: function() {
-            this.options = [];
-        }
+            this.form.options = [];
+        },
+        submitForm () {
+          this.$refs.form.validate();
+        },
     }
   }
   </script>
