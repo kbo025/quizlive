@@ -37,7 +37,7 @@ const create = async (req, res, next) => {
             code,
             topic,
             statement,
-            value,
+            value: parseInt(value),
         });
 
         options.forEach( async statement => {

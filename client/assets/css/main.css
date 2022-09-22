@@ -82,7 +82,7 @@ small {
     color: #97a4b1;
 }
 
-button.primary, button.accent {
+button.primary, button.accent, a.v-btn.primary, a.v-btn.accent  {
     font-family: 'Montserrat';
     border-radius: 16px;
     font-weight: 600;

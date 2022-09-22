@@ -70,7 +70,6 @@ export default {
         this.error = true;
         console.log(err);
       }
-
     },
   },
 }

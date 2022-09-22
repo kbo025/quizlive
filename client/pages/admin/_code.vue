@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-col class="maincol" cols="12" sm="8" md="6">
       <div class="title text-center">
-        <h3><b>Olá: {{ name }}</b></h3>
+        <h3><b>Olá: {{ user.name }}</b></h3>
         <small>Envie o seguinte link para os estudantes entrar no quiz: <br> {{ room.url }}</small>
       </div>
       <div class="subtitle">
@@ -16,7 +16,7 @@
           </v-expansion-panels>
           <v-btn
               block
-              @click="addQuestion"
+              :to="`/question/${room.code}`"
               class="primary my-3 py-5">
               Agregar Pergunta
           </v-btn>
@@ -35,16 +35,16 @@
 import Question from "../../components/Question.vue";
 
 export default {
-    name: "IndexPage",
+    name: "AdminPage",
     components: { Question },
     async asyncData({ store  }) {
       const room = store.state.room;
       const user = store.state.auth;
-      return { name: user.name, room }
+      return { user, room }
     },
     data: () => {
         return {
-            name: '',
+            user: null,
             room: null,
             total:150,
             value: 95,
@@ -54,9 +54,6 @@ export default {
         }
     },
     methods: {
-      addQuestion() {
-        this.$router.push(`/question/${this.room.code}`);
-      },
       async closeRoom() {
         try {
             const res = await this.$axios.put(`/room/${this.roomCode}`, { status: 1 });
