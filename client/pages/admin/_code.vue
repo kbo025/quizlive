@@ -54,7 +54,7 @@ export default {
         try {
             const res = await this.$axios.put(`/room/${this.room.code}`, { status: 1 });
             this.$store.commit('setRoom', res.data);
-            this.$router.push(`/result/${this.room.code}`);
+            this.$router.push(`/results/${this.room.code}`);
         } catch (err) {
           this.error = true;
           console.log(err);

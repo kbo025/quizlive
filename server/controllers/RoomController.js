@@ -57,9 +57,9 @@ const create = async (req, res, next) => {
 
 const update = async (req, res, next) => {
     try {
-        const id = req.params.id;
+        const code = req.params.codeRoom;
         const data = req.body;
-        const room = await Room.update(id, data);
+        const room = await Room.update(code, data);
         const resp = await room.toJson();
         res.json(resp);
     } catch (e) {
