@@ -31,13 +31,14 @@ const create = async (req, res, next) => {
     try {
         const { name, classroom } = req.body;
         const codeRoom = Utils.codeGenerator('R', 5);
-        const baseUrl = process.env.BASE_URL || '';
-        const room = await Room.createWithTeacher(
+        const baseUrl = process.env.CLIENT_BASE_URL || '';
+        const { room, teacher } = await Room.createWithTeacher(
             { name: classroom, code: codeRoom, url: `${baseUrl}/invite/${codeRoom}` },
             { name, code: Utils.codeGenerator('T', 5) }
         );
 
         const resp = await room.toJson();
+        resp.teacher = await teacher.toJson();
         res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message });

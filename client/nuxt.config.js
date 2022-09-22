@@ -1,4 +1,9 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from 'vuetify/es5/util/colors';
+require("dotenv").config({ path: '../.env' });
+const BASE_URL = process.env.SERVER_URL || '';
+const PORT = process.env.SERVER_PORT ? `:${process.env.SERVER_PORT}` : '';
+const PREFIX = process.env.SERVER_PREFIX ? `/${process.env.SERVER_PREFIX}` : '';
+const url = BASE_URL + PORT + PREFIX; 
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -44,7 +49,14 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next'
   ],
+
+  axios: {
+    // proxy: true,
+    baseURL: url
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

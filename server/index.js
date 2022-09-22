@@ -3,20 +3,29 @@
 require("dotenv").config({ path: '../.env' });
 const restify = require('restify');
 const RoonMiddleware = require('./middleware/RoomMiddleware');
+const corsMiddleware = require('restify-cors-middleware');
 const AuthTeacherMiddleware = require('./middleware/AuthTeacherMiddleware');
 const {
     Room, Teacher, Student, Question, Option, Answer
 } = require('./controllers');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.SERVER_PORT || 3000;
 const server = restify.createServer({
     name: 'quizlive',
     version: '1.0.0',
+});
+const cors = corsMiddleware({
+    origins: ['http://localhost:3000'],
+    allowHeaders: ['X-App-Version'],
+    credentials: true,
+    exposeHeaders: []
 });
 
 server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser({ mapParams: true }));
 server.use(restify.plugins.bodyParser({ mapParams: true }));
+server.pre(cors.preflight);
+server.use(cors.actual);
 
 server.get('/api/hello', (req, resp, next) => {
     resp.json({msj: 'Hello Word...!!!'});

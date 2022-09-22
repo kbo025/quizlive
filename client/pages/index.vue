@@ -8,15 +8,16 @@
         <h3>Para começar a aula indique seu nome e um titulo e de click no botão 'Criar Sala'.</h3>
       </div>
       <div class="content">
+        <v-alert outlined dismissible :value="error"  type="error">Erro nos dados enviados</v-alert>
         <v-form ref="form" lazy-validation>
           <v-text-field
             label="Nome"
-            :v-model="form.name"
+            v-model="form.name"
             :rules="rules.name"
             outlined>
           </v-text-field>
           <v-text-field
-            :v-model="form.classroom"
+            v-model="form.classroom"
             :rules="rules.classroom"
             label="Titulo da aula"
             outlined>
@@ -41,6 +42,7 @@ export default {
   name: 'MainPage',
   data: () => {
     return {
+      error: false,
       rules: {
         name: [
           v => !!v || 'Requerido',
@@ -56,8 +58,19 @@ export default {
     }
   },
   methods: {
-    submitForm () {
-      this.$refs.form.validate();
+    async submitForm() {
+      try {
+        if (this.$refs.form.validate()) {
+          const res = await this.$axios.post(`/room`, this.form);
+          this.$store.commit('setAuth', { name: res.data.name, role: 'teacher', token: res.data.teacher.teacher_id });
+          this.$store.commit('setRoom', res.data);
+          this.$router.push(`/admin/${res.data.code}`);
+        }
+      } catch (err) {
+        this.error = true;
+        console.log(err);
+      }
+
     },
   },
 }

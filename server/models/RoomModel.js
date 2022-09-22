@@ -23,7 +23,7 @@ const createWithTeacher = async (dataRoom, dataTeacher) => {
     const room = await instance.create(resourceName, dataRoom);
     const teacher = await instance.create('Teacher', dataTeacher);
     await room.relateTo(teacher, 'teacher');
-    return room;
+    return { room, teacher };
 }
 
 const update = async (code, data) => {
