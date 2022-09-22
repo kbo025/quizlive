@@ -1,8 +1,11 @@
 'use strict'
 
 const {
-    Question
+    Question,
+    Option
 } = require('../models');
+const Utils = require('../services/Utils');
+
 
 const index = async (req, res, next) => {
     try {
@@ -28,8 +31,27 @@ const view = async (req, res, next) => {
 
 const create = async (req, res, next) => {
     try {
-        const data = req.body;
-        const question = await Question.create(data);
+        const { topic, statement, value, rigthAnswer, options } = req.body;
+        const code = Utils.codeGenerator('Q', 5);
+        const question = await Question.create({
+            code,
+            topic,
+            statement,
+            value,
+        });
+
+        options.forEach( async statement => {
+            const code = Utils.codeGenerator('O', 5);
+            const option = await Option.create({
+                code,
+                statement,
+                rigth_answer: rigthAnswer == statement
+            });
+
+            question.relateTo(option, 'options');
+        });
+
+        await req.data.room.relateTo(question, 'questions');
         const resp = await question.toJson();
         res.json(resp);
     } catch (e) {

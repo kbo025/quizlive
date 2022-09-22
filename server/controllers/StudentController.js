@@ -32,7 +32,7 @@ const create = async (req, res, next) => {
         const { name } = req.body;
         const code = Utils.codeGenerator('S', 5);
         const student = await Student.create({ name, code });
-        req.data.room.relateTo(student, 'students');
+        await req.data.room.relateTo(student, 'students');
         const resp = await student.toJson();
         res.json(resp);
     } catch (e) {

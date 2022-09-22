@@ -3,6 +3,7 @@
 require("dotenv").config({ path: '../.env' });
 const restify = require('restify');
 const RoonMiddleware = require('./middleware/RoomMiddleware');
+const AuthTeacherMiddleware = require('./middleware/AuthTeacherMiddleware');
 const {
     Room, Teacher, Student, Question, Option, Answer
 } = require('./controllers');
@@ -65,11 +66,36 @@ server.post(`/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}/:codeSt
 server.put(`/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}/:codeStudent/${Answer.nameResourse}/:code`, Answer.update);
 server.del(`/api/${Room.nameResourse}/:codeRoom/${Student.nameResourse}/:codeStudent/${Answer.nameResourse}/:code`, Answer.remove);
 
-server.get(`/api/${Room.nameResourse}/:codeRoom/${Question.nameResourse}`, Question.index);
-server.get(`/api/${Room.nameResourse}/:codeRoom/${Question.nameResourse}/:code`, Question.view);
-server.post(`/api/${Room.nameResourse}/:codeRoom/${Question.nameResourse}`, Question.create);
-server.put(`/api/${Room.nameResourse}/:codeRoom/${Question.nameResourse}/:code`, Question.update);
-server.del(`/api/${Room.nameResourse}/:codeRoom/${Question.nameResourse}/:code`, Question.remove);
+server.get(
+    `/api/${Room.nameResourse}/:codeRoom/${Question.nameResourse}`,
+    RoonMiddleware,
+    AuthTeacherMiddleware,
+    Question.index
+);
+server.get(
+    `/api/${Room.nameResourse}/:codeRoom/${Question.nameResourse}/:code`,
+    RoonMiddleware,
+    AuthTeacherMiddleware,
+    Question.view
+);
+server.post(
+    `/api/${Room.nameResourse}/:codeRoom/${Question.nameResourse}`,
+    RoonMiddleware,
+    AuthTeacherMiddleware,
+    Question.create
+);
+server.put(
+    `/api/${Room.nameResourse}/:codeRoom/${Question.nameResourse}/:code`,
+    RoonMiddleware,
+    AuthTeacherMiddleware,
+    Question.update
+);
+server.del(
+    `/api/${Room.nameResourse}/:codeRoom/${Question.nameResourse}/:code`,
+    RoonMiddleware,
+    AuthTeacherMiddleware,
+    Question.remove
+);
 
 server.get(`/api/${Room.nameResourse}/:codeRoom/${Question.nameResourse}/:codeQuestion/${Option.nameResourse}`, Option.index);
 server.get(`/api/${Room.nameResourse}/:codeRoom/${Question.nameResourse}/:codeQuestion/${Option.nameResourse}/:code`, Option.view);

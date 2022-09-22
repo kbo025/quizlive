@@ -9,12 +9,19 @@
     code: {
         type: 'string',
         index: true,
+        required: true,
+    },
+    topic: {
+        type: 'string',
+        required: true,
     },
     statement: {
         type: 'string',
+        required: true,
     },
     value: {
         type: 'number',
+        default: 0,
     },
     createdAt: {
         type: 'datetime',
