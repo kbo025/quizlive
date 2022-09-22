@@ -33,8 +33,10 @@ const create = async (req, res, next) => {
         const code = Utils.codeGenerator('S', 5);
         const student = await Student.create({ name, code });
         await req.data.room.relateTo(student, 'students');
+        const roomJson = await req.data.room.toJson();
         const resp = await student.toJson();
-        res.json(resp);
+        roomJson.student = resp;
+        res.json(roomJson);
     } catch (e) {
         res.json(500, { success: false, message: e.message });
     }
