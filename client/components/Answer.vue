@@ -27,7 +27,7 @@
                     outlined
                     class="my-3 py-5"
                     active-class="success white--text" 
-                    :value="item.id">
+                    :value="item.code">
                     <b class="hidden-sm-and-down">{{ item.text }}</b>
                 </v-btn>
             </v-btn-toggle>
@@ -56,8 +56,8 @@
                 { id: 3, text: '5', rigth: true },
                 { id: 4, text: '21', rigth: false },
             ],
-            answered: true,
-            rigth: true,
+            answered: false,
+            rigth: false,
             value: 10,
         }
       }

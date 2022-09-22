@@ -31,7 +31,7 @@ const view = async (req, res, next) => {
 
 const create = async (req, res, next) => {
     try {
-        const { topic, statement, value, rigthAnswer, options } = req.body;
+        const { topic, statement, value, rigthOption, options } = req.body;
         const code = Utils.codeGenerator('Q', 5);
         const question = await Question.create({
             code,
@@ -45,7 +45,7 @@ const create = async (req, res, next) => {
             const option = await Option.create({
                 code,
                 statement,
-                rigth_answer: rigthAnswer == statement
+                rigth_answer: rigthOption == statement
             });
 
             question.relateTo(option, 'options');

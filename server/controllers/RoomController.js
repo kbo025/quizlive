@@ -1,7 +1,8 @@
 'use strict'
 require("dotenv").config({ path: '../.env' });
 const {
-    Room
+    Room,
+    Question
 } = require('../models');
 const Utils = require('../services/Utils');
 
@@ -18,9 +19,16 @@ const index = async (req, res, next) => {
 
 const view = async (req, res, next) => {
     try {
-        const id = req.params.id;
-        const room = await Room.getOne(id);
+        const code = req.params.codeRoom;
+        const room = await Room.getOne(code);
         const resp = await room.toJson();
+        const questions = await Room.getQuestions(code);
+        resp.questions = questions.records.map( e => e._fields[0].properties);
+        for ( let i = 0; i < resp.questions.length; i++ ) {
+            const options = await Question.getOptions(resp.questions[i].code);
+            resp.questions[i].options = options.records.map( o => o._fields[0].properties );
+        }
+
         res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message });

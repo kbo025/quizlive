@@ -29,10 +29,16 @@ const remove = async (code) => {
     return true;
 }
 
+const getOptions = async (code) => {
+    const query = `MATCH (q:Question)-[:IS_OPTION]-(Options) WHERE q.code = $code RETURN Options`;
+    return await instance.cypher(query, { code });
+} 
+
 module.exports = {
     getOne,
     getAll,
     create,
     update,
-    remove
+    remove,
+    getOptions
 }

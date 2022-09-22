@@ -51,7 +51,6 @@
         target: "Question",
         relationship: "IS_QUESTION",
         direction: "out",
-        properties: {},
-        eager: true
+        properties: {}
     }
 };

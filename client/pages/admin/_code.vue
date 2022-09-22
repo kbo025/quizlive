@@ -10,9 +10,7 @@
       </div>
       <div class="content">
           <v-expansion-panels>
-              <Question></Question>
-              <Question></Question>
-              <Question></Question>
+              <Question v-for="question in room.questions" :key="JSON.stringify(question)" :model="question"></Question>
           </v-expansion-panels>
           <v-btn
               block
@@ -37,8 +35,9 @@ import Question from "../../components/Question.vue";
 export default {
     name: "AdminPage",
     components: { Question },
-    async asyncData({ store  }) {
-      const room = store.state.room;
+    async asyncData({ store, $axios, params  }) {
+      const res = await $axios.get(`/room/${params.code}`);
+      const room = res.data;
       const user = store.state.auth;
       return { user, room }
     },
@@ -48,17 +47,14 @@ export default {
             room: null,
             total:150,
             value: 95,
-            room: {
-              status: 0
-            }
         }
     },
     methods: {
       async closeRoom() {
         try {
-            const res = await this.$axios.put(`/room/${this.roomCode}`, { status: 1 });
+            const res = await this.$axios.put(`/room/${this.room.code}`, { status: 1 });
             this.$store.commit('setRoom', res.data);
-            this.$router.push(`/result/${this.roomCode}`);
+            this.$router.push(`/result/${this.room.code}`);
         } catch (err) {
           this.error = true;
           console.log(err);

@@ -3,27 +3,27 @@
         <v-expansion-panel-header>
             <span>
                 <v-icon class="mr-3" color="primary">mdi-checkbox-blank-circle</v-icon>
-                {{ label }}
+                {{ model.topic }}
             </span>
             <template v-slot:actions>
-                <v-icon color="accent">$expand</v-icon>
+                <span><b>+{{ model.value }}XP</b></span>
             </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-            <h2 class="my-5 text-center">{{ statement }}</h2>
+            <h2 class="my-5 text-center">{{ model.statement }}</h2>
             <v-btn-toggle
                 class="d-flex flex-column"
                 v-model="answer">
                 <v-btn
-                    v-for="item in options"
+                    v-for="item in model.options"
                     :key="JSON.stringify(item)"
-                    :disabled="answered"
+                    :disabled="true"
                     block
                     outlined
                     class="my-3 py-5"
                     active-class="success white--text" 
-                    :value="item.id">
-                    <b class="hidden-sm-and-down">{{ item.text }}</b>
+                    :value="item.code">
+                    <b class="hidden-sm-and-down">{{ item.statement }}</b>
                 </v-btn>
             </v-btn-toggle>
         </v-expansion-panel-content>
@@ -32,23 +32,33 @@
   
   <script>
     export default {
-      name: 'Answer',
-      data: () => {
-        return {
-            answer: null,
-            label: 'Números primos',
-            statement: 'Cual de los siguientes es un número primo?',
-            options: [
-                { id: 1, text: '8', rigth: false },
-                { id: 2, text: '15', rigth: false },
-                { id: 3, text: '5', rigth: true },
-                { id: 4, text: '21', rigth: false },
-            ],
-            answered: true,
-            rigth: true,
-            value: 10,
+        name: 'Question',
+        props: {
+            model: {
+                type: Object,
+                required: false,
+            },
+        },
+        mounted() {
+            const option = this.model.options.find( e => e.rigth_answer );
+            this.answer = option ? option.code : null;
+        },
+        data: () => {
+            return {
+                answer: null,
+                label: 'Números primos',
+                statement: 'Cual de los siguientes es un número primo?',
+                options: [
+                    { id: 1, text: '8', rigth: false },
+                    { id: 2, text: '15', rigth: false },
+                    { id: 3, text: '5', rigth: true },
+                    { id: 4, text: '21', rigth: false },
+                ],
+                answered: true,
+                rigth: true,
+                value: 10,
+            }
         }
-      }
     }
     </script>
 
