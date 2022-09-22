@@ -16,11 +16,13 @@
           </v-expansion-panels>
           <v-btn
               block
+              @click="addQuestion"
               class="primary my-3 py-5">
               Agregar Pergunta
           </v-btn>
           <v-btn
               block
+              @click="closeRoom"
               class="accent my-3 py-5">
               Fechar Aula
           </v-btn>
@@ -50,6 +52,21 @@ export default {
               status: 0
             }
         }
+    },
+    methods: {
+      addQuestion() {
+        this.$router.push(`/question/${this.room.code}`);
+      },
+      async closeRoom() {
+        try {
+            const res = await this.$axios.put(`/room/${this.roomCode}`, { status: 1 });
+            this.$store.commit('setRoom', res.data);
+            this.$router.push(`/result/${this.roomCode}`);
+        } catch (err) {
+          this.error = true;
+          console.log(err);
+        }
+      },
     },
     computed: {
       result: function() {
