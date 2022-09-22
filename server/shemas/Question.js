@@ -19,7 +19,7 @@
         type: 'string',
         required: true,
     },
-    value: {
+    xp: {
         type: 'number',
         default: 1,
     },

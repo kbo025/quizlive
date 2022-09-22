@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
         if (!room) {
             res.json(400, { success: false, message: 'resource not found!' });
         }
-        req.data = { room };
+        req.data = { ...req.data, room };
         next();
     } catch (err) {
         res.json(500, { success: false, message: err.message });

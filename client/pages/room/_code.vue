@@ -2,8 +2,8 @@
     <v-row justify="center">
       <v-col class="maincol" cols="12" sm="8" md="6">
         <div class="title text-center">
-          <h3><b>Olá: {{ 'Gabo' }}</b></h3>
-          <h3>Ben-vindo ao aula de {{ 'Nome da aula' }}</h3>
+          <h3><b>Olá: {{ user.name }}</b></h3>
+          <h3>Ben-vindo ao aula de {{ room.name }}</h3>
         </div>
         <div class="subtitle">
           <h3 v-if="room.status == 0">Responde as perguntas do professor:</h3>
@@ -11,9 +11,14 @@
         </div>
         <div class="content" v-if="room.status == 0">
             <v-expansion-panels>
-                <Answer></Answer>
-                <Answer></Answer>
-                <Answer></Answer>
+                <Answer
+                  :room="room.code"
+                  :student="user.code"
+                  v-for="answer in room.questions"
+                  @addanswer="addanswer"
+                  :key="JSON.stringify(answer)"
+                  :model="answer">
+                </Answer>
             </v-expansion-panels>
         </div>
         <div class="content d-flex justify-center" v-else-if="room.status == 1">
@@ -22,7 +27,7 @@
             :size="200"
             :width="25"
             color="success">
-            <h1>{{ `${value}PX` }}</h1>
+            <h1>{{ `${xp}PX` }}</h1>
           </v-progress-circular>
         </div>
       </v-col>
@@ -33,27 +38,39 @@
 import Answer from "../../components/Answer.vue";
 
 export default {
-    name: "IndexPage",
+    name: "RoomPage",
     components: { Answer },
+    async asyncData({ store, $axios, params  }) {
+        const user = store.state.auth;
+        const res = await $axios.get(
+            `/room/${params.code}`,
+            { headers: { 'authorization': user.token } }
+        );
+        const room = res.data;
+        return { user, room }
+    },
     data: () => {
         return {
-            total:150,
-            value: 95,
-            room: {
-              status: 0
-            }
+          user: null,
+          room: null,
+          xp: 0
         }
     },
-    computed: {
-      result: function() {
-        return (this.value / this.total) * 100;
+    methods: {
+      addanswer(data) {
+        this.xp = this.xp + data.xp;
       }
+    },
+    computed: {
+        result: function() {
+            return ((this.xp || 0) / (this.room.xp || 1)) * 100;
+        }
     }
 }
 </script>
-  
+
 <style scoped>
     .v-progress-circular {
-      margin: 5rem;
+        margin: 5rem;
     }
 </style>

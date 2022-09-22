@@ -2,7 +2,8 @@
 require("dotenv").config({ path: '../.env' });
 const {
     Room,
-    Question
+    Question,
+    Student
 } = require('../models');
 const Utils = require('../services/Utils');
 
@@ -27,6 +28,13 @@ const view = async (req, res, next) => {
         for ( let i = 0; i < resp.questions.length; i++ ) {
             const options = await Question.getOptions(resp.questions[i].code);
             resp.questions[i].options = options.records.map( o => o._fields[0].properties );
+        }
+
+        if (req.data.user.role == 'student') {
+            const answers = await Student.getAnswers(req.data.user.code);
+            resp.questions.forEach(qu => {
+                qu.answer = answers.records.map( an => an._fields[0].properties).find( an => an.code == qu.code);
+            });
         }
 
         res.json(resp);

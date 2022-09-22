@@ -6,27 +6,22 @@ const resourceName = 'Student';
 const rowsForPage = 25;
 
 const getOne = async (code) => {
-    let result = await instance.first(resourceName, 'code', code);
-    const props = result.properties();
-    return props;
+    return await instance.first(resourceName, 'code', code);
 }
 
 const getAll = async (page) => {
     const offset = page ? (page * rowsForPage) - rowsForPage : 0;
-    const collection = await instance.all(resourceName, {}, {createdAt: 'DESC'}, rowsForPage, offset);
-    return await collection.toJson();
+    return await instance.all(resourceName, {}, {createdAt: 'DESC'}, rowsForPage, offset);
 }
 
 const create = async (data) => {
-    const result = await instance.create(resourceName, data);
-    return result;
+    return await instance.create(resourceName, data);
 }
 
 const update = async (code, data) => {
-    let result = await instance.first(resourceName, 'code', code);
-    await result.update(data);
-    const props = result.properties();
-    return props;
+    let option = await instance.first(resourceName, 'code', code);
+    await option.update(data);
+    return option;
 }
 
 const remove = async (code) => {
@@ -34,10 +29,16 @@ const remove = async (code) => {
     return true;
 }
 
+const getAnswers = async (code) => {
+    const query = `MATCH (s:Student)-[:IS_ANSWER]-(Answers) WHERE s.code = $code RETURN Answers`;
+    return await instance.cypher(query, { code });
+} 
+
 module.exports = {
     getOne,
     getAll,
     create,
     update,
-    remove
+    remove,
+    getAnswers
 }

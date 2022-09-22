@@ -56,8 +56,7 @@ export default {
       try {
         if (this.$refs.form.validate()) {
           const res = await this.$axios.post(`/room/${this.roomCode}/student`, this.form);
-          this.$store.commit('setAuth', { name: res.data.student.name, role: 'student', token: res.data.student.student_id });
-          this.$store.commit('setRoom', res.data);
+          this.$store.commit('setAuth', { name: res.data.name, role: 'student', token: res.data.student_id, code: res.data.code });
           this.$router.push(`/room/${this.roomCode}`);
         }
       } catch (err) {
@@ -68,4 +67,3 @@ export default {
   },
 }
 </script>
-

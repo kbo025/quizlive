@@ -1,15 +1,16 @@
 'use strict'
 
 const {
+    Room,
     Student
 } = require('../models');
 const Utils = require('../services/Utils');
 
 const index = async (req, res, next) => {
     try {
-        let page = req.query.page || 1; 
-        const student = await Student.getAll(page);
-        const resp = await student.toJson();
+        const code = req.data.room.get('code');
+        const students = await Room.getStudents(code);
+        const resp = students.records.map( e => e._fields[0].properties);
         res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message});
@@ -33,10 +34,8 @@ const create = async (req, res, next) => {
         const code = Utils.codeGenerator('S', 5);
         const student = await Student.create({ name, code });
         await req.data.room.relateTo(student, 'students');
-        const roomJson = await req.data.room.toJson();
         const resp = await student.toJson();
-        roomJson.student = resp;
-        res.json(roomJson);
+        res.json(resp);
     } catch (e) {
         res.json(500, { success: false, message: e.message });
     }

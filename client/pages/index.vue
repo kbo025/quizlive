@@ -62,7 +62,7 @@ export default {
       try {
         if (this.$refs.form.validate()) {
           const res = await this.$axios.post(`/room`, this.form);
-          this.$store.commit('setAuth', { name: res.data.teacher.name, role: 'teacher', token: res.data.teacher.teacher_id });
+          this.$store.commit('setAuth', { name: res.data.teacher.name, role: 'teacher', token: res.data.teacher.teacher_id, code: res.data.teacher.code });
           this.$store.commit('setRoom', res.data);
           this.$router.push(`/admin/${res.data.code}`);
         }

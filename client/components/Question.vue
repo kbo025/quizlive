@@ -6,7 +6,7 @@
                 {{ model.topic }}
             </span>
             <template v-slot:actions>
-                <span><b>+{{ model.value }}XP</b></span>
+                <span><b>+{{ model.xp }}XP</b></span>
             </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -46,25 +46,10 @@
         data: () => {
             return {
                 answer: null,
-                label: 'Números primos',
-                statement: 'Cual de los siguientes es un número primo?',
-                options: [
-                    { id: 1, text: '8', rigth: false },
-                    { id: 2, text: '15', rigth: false },
-                    { id: 3, text: '5', rigth: true },
-                    { id: 4, text: '21', rigth: false },
-                ],
                 answered: true,
-                rigth: true,
-                value: 10,
             }
         }
     }
-    </script>
+</script>
 
-  <style>
-  .nuxt-logo {
-    height: 180px;
-  }
-  </style>
   

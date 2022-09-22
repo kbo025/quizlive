@@ -26,6 +26,10 @@
         default: 0,
         valid: [0, 1]
     },
+    xp: {
+        type: 'number',
+        default: 0,
+    },
     createdAt: {
         type: 'datetime',
         default: () => new Date,

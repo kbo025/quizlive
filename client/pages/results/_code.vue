@@ -2,7 +2,7 @@
     <v-row justify="center">
       <v-col class="maincol" cols="12" sm="8" md="6">
         <div class="title text-center">
-          <h3><b>Olá: {{ 'Gabo' }}</b></h3>
+          <h3><b>Olá: {{ user.name }}</b></h3>
         </div>
         <div class="subtitle">
           <h3>Estes forom os resultados do Quiz:</h3>
@@ -21,7 +21,7 @@
                     </v-list-item-content>
 
                     <v-list-item-icon>
-                        <span><b>{{student.value}}%</b></span>
+                        <span><b>{{ getPerc(student.xp) }}%</b></span>
                     </v-list-item-icon>
                 </v-list-item>
             </v-list>
@@ -30,22 +30,37 @@
     </v-row>
   </template>
   
-  <script>
-  export default {
-      name: "ResultPage",
-      data: () => {
-          return {
-            students: [
-                { code: 'E0001', name: 'Gabo', value: 75},
-                { code: 'E0002', name: 'Alfredo', value: 80},
-                { code: 'E0003', name: 'Victor', value: 100},
-                { code: 'E0004', name: 'Luis', value: 12},
-            ]
-          }
-      },
-      computed: {
+<script>
+export default {
+    name: "ResultPage",
+    async asyncData({ store, $axios, params }) {
+        const user = store.state.auth;
+        const resRoom = await $axios.get(
+            `/room/${params.code}`,
+            { headers: { 'authorization': user.token } }
+        );
+        const room = resRoom.data;
+        const resStudents = await $axios.get(
+            `/room/${params.code}/student`,
+            { headers: { 'authorization': user.token } }
+        );
+        const students = resStudents.data;
 
-      }
-  }
-  </script>
+        return { user, room, students }
+    },
+    data: () => {
+        return {
+            room: null,
+            students: []
+        }
+    },
+    methods: {
+        getPerc(xp) {
+            return Math.ceil((((xp || 0) / (this.room.xp || 1)) * 100));
+        }
+    },
+    computed: {
+    }
+}
+</script>
   

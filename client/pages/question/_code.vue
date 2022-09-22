@@ -18,8 +18,8 @@
                 </v-text-field>
                 <v-text-field
                     label="Valor (XP)"
-                    v-model="form.value"
-                    :rules="rules.value"
+                    v-model="form.xp"
+                    :rules="rules.xp"
                     outlined>
                 </v-text-field>
                 <v-textarea
@@ -93,7 +93,7 @@
             form: {
                 topic: null,
                 statement: null,
-                value: 1,
+                xp: 1,
                 rigthOption: null,
                 options: [
                     'SIM',
@@ -107,7 +107,7 @@
                 statement: [
                     v => !!v || 'Requerido',
                 ],
-                value: [
+                xp: [
                     v => !!v || 'Requerido',
                     v => (v && /^\d*$/.test(v) && parseInt(v) > 0 ) || 'Deve ser um número inteiro positivo',
                 ],

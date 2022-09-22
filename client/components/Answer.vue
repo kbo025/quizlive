@@ -3,24 +3,23 @@
         <v-expansion-panel-header>
             <span>
                 <v-icon v-if="!answered" class="mr-3" color="primary">mdi-checkbox-blank-circle</v-icon>
-                <v-icon v-else-if="answered && rigth" class="mr-3" color="success">mdi-checkbox-marked-circle</v-icon>
+                <v-icon v-else-if="answered && answered.rigth" class="mr-3" color="success">mdi-checkbox-marked-circle</v-icon>
                 <v-icon v-else class="mr-3" color="error">mdi-close-circle</v-icon>
-                {{ label }}
+                {{ model.topic }}
             </span>
             <template v-slot:actions>
                 <v-icon v-if="!answered" color="accent">$expand</v-icon>
-                <span v-else-if="answered && rigth" ><b>+{{ value }}XP</b></span>
+                <span v-else-if="answered && answered.rigth" ><b>+{{ answered.xp }}XP</b></span>
                 <span v-else><b>-</b></span>
             </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-            <h2 class="my-5 text-center">{{ statement }}</h2>
+            <h2 class="my-5 text-center">{{ model.statement }}</h2>
             <v-btn-toggle
                 class="d-flex flex-column"
-                v-model="answer"
-            >
+                v-model="answer">
                 <v-btn
-                    v-for="item in options"
+                    v-for="item in model.options"
                     :key="JSON.stringify(item)"
                     :disabled="answered"
                     block
@@ -28,13 +27,14 @@
                     class="my-3 py-5"
                     active-class="success white--text" 
                     :value="item.code">
-                    <b class="hidden-sm-and-down">{{ item.text }}</b>
+                    <b class="hidden-sm-and-down">{{ item.statement }}</b>
                 </v-btn>
             </v-btn-toggle>
             <v-btn
                 block
-                :disabled="answered"
+                :disabled="answered || !answer"
                 color="primary"
+                @click="send"
                 class="my-5 py-5">
                 Continuar
             </v-btn>
@@ -44,23 +44,49 @@
   
   <script>
     export default {
-      name: 'Answer',
-      data: () => {
-        return {
-            answer: null,
-            label: 'Números primos',
-            statement: 'Cual de los siguientes es un número primo?',
-            options: [
-                { id: 1, text: '8', rigth: false },
-                { id: 2, text: '15', rigth: false },
-                { id: 3, text: '5', rigth: true },
-                { id: 4, text: '21', rigth: false },
-            ],
-            answered: false,
-            rigth: false,
-            value: 10,
+        name: 'Answer',
+        props: {
+            room: {
+                type: String,
+                required: true,
+            },
+            student: {
+                type: String,
+                required: true,
+            },
+            model: {
+                type: Object,
+                required: true,
+            },
+        },
+        data: () => {
+            return {
+                answer: null,
+                answered: false,
+                user: null,
+            }
+        },
+        mounted() {
+            this.answer = this.model.answer ? this.model.answer.option : null;
+            this.answered = this.model.answer || false;
+            this.user = this.$store.state.auth;
+        },
+        methods: {
+            send: async function() {
+                try {
+                    const res = await this.$axios.post(
+                        `/room/${this.room}/student/${this.student}/answer`,
+                        { questionCode: this.model.code, optionCode: this.answer },
+                        { headers: { 'authorization': this.user.token } }
+                    );
+                    this.answered = res.data
+                    this.$emit('addanswer', res.data)
+                } catch (err) {
+                    this.error = true;
+                    console.log(err);
+                }
+            }
         }
-      }
     }
     </script>
 

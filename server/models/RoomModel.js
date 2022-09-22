@@ -14,6 +14,11 @@ const getQuestions = async (code) => {
     return await instance.cypher(query, { code });
 } 
 
+const getStudents = async (code) => {
+    const query = `MATCH (r:Room)-[:IS_STUDENT]-(Students) WHERE r.code = $code RETURN Students`;
+    return await instance.cypher(query, { code });
+} 
+
 const getAll = async (page) => {
     const offset = page ? (page * rowsForPage) - rowsForPage : 0;
     const collection = await instance.all(resourceName, {}, {createdAt: 'DESC'}, rowsForPage, offset);
@@ -49,5 +54,6 @@ module.exports = {
     update,
     remove,
     createWithTeacher,
-    getQuestions
+    getQuestions,
+    getStudents
 }

@@ -36,23 +36,28 @@ export default {
     name: "AdminPage",
     components: { Question },
     async asyncData({ store, $axios, params  }) {
-      const res = await $axios.get(`/room/${params.code}`);
-      const room = res.data;
       const user = store.state.auth;
+      const res = await $axios.get(
+        `/room/${params.code}`,
+        { headers: { 'authorization': user.token } }
+      );
+      const room = res.data;
       return { user, room }
     },
     data: () => {
         return {
             user: null,
             room: null,
-            total:150,
-            value: 95,
         }
     },
     methods: {
       async closeRoom() {
         try {
-            const res = await this.$axios.put(`/room/${this.room.code}`, { status: 1 });
+            const res = await this.$axios.put(
+              `/room/${this.room.code}`,
+              { status: 1 },
+              { headers: { 'authorization': this.user.token } }
+            );
             this.$store.commit('setRoom', res.data);
             this.$router.push(`/results/${this.room.code}`);
         } catch (err) {
@@ -62,9 +67,7 @@ export default {
       },
     },
     computed: {
-      result: function() {
-        return (this.value / this.total) * 100;
-      }
+
     }
 }
 </script>

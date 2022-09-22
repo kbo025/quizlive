@@ -15,6 +15,10 @@
         type: 'string',
         required: true,
     },
+    xp: {
+        type: 'number',
+        default: 0,
+    },
     createdAt: {
         type: 'datetime',
         default: () => new Date,
@@ -22,7 +26,7 @@
     answers: {
         type: "relationship",
         target: "Answer",
-        relationship: "IS_OPTION",
+        relationship: "IS_ANSWER",
         direction: "out",
         properties: {},
         eager: true

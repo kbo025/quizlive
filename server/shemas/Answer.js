@@ -11,16 +11,16 @@
         index: true,
         required: true,
     },
-    rigth_answer: {
+    rigth: {
         type: 'boolean',
         required: true,
         default: false,
     },
-    statement: {
+    option: {
         type: 'string',
         required: true,
     },
-    value: {
+    xp: {
         type: 'number',
         required: true,
     },

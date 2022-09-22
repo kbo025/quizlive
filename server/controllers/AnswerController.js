@@ -1,6 +1,9 @@
 'use strict'
 
 const {
+    Question,
+    Option,
+    Student,
     Answer
 } = require('../models');
 
@@ -28,11 +31,24 @@ const view = async (req, res, next) => {
 
 const create = async (req, res, next) => {
     try {
-        const data = req.body;
-        const answer = await Answer.create(data);
+        const { questionCode, optionCode } = req.body;
+        const question = await Question.getOne(questionCode);
+        const option = await Option.getOne(optionCode);
+        const student =  await Student.getOne(req.params.codeStudent);
+        const rigth = option.get('rigth_answer');
+        const xp = question.get('xp');
+        const answer = await Answer.create({
+            code: question.get('code'),
+            option: option.get('code'),
+            rigth,
+            xp: rigth ? xp : 0
+        });
+        await student.relateTo(answer, 'answers');
+        await Student.update( student.get('code'), { xp: student.get('xp') + (rigth ? xp : 0) });
         const resp = await answer.toJson();
         res.json(resp);
     } catch (e) {
+        console.log(e);
         res.json(500, { success: false, message: e.message });
     }
 }
