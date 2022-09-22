@@ -10,12 +10,17 @@ const {
 } = require('./controllers');
 
 const PORT = process.env.SERVER_PORT || 3000;
+
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL || '';
+const CLIENT_PORT = process.env.CLIENT_PORT ? `:${process.env.CLIENT_PORT}` : '';
+const clientUrl = CLIENT_BASE_URL + CLIENT_PORT;
+
 const server = restify.createServer({
     name: 'quizlive',
     version: '1.0.0',
 });
 const cors = corsMiddleware({
-    origins: ['http://localhost:3000'],
+    origins: [clientUrl],
     allowHeaders: ['X-App-Version'],
     credentials: true,
     exposeHeaders: []

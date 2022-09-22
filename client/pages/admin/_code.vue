@@ -2,8 +2,8 @@
   <v-row justify="center">
     <v-col class="maincol" cols="12" sm="8" md="6">
       <div class="title text-center">
-        <h3><b>Olá: {{ 'Gabo' }}</b></h3>
-        <small>Envie o seguinte link para os estudantes entrar no quiz: <br> {{ 'www.exemplo.com/invite/R0001' }}</small>
+        <h3><b>Olá: {{ name }}</b></h3>
+        <small>Envie o seguinte link para os estudantes entrar no quiz: <br> {{ room.url }}</small>
       </div>
       <div class="subtitle">
         <h3>Agregue perguntas no Quiz:</h3>
@@ -35,8 +35,15 @@ import Question from "../../components/Question.vue";
 export default {
     name: "IndexPage",
     components: { Question },
+    async asyncData({ store  }) {
+      const room = store.state.room;
+      const user = store.state.auth;
+      return { name: user.name, room }
+    },
     data: () => {
         return {
+            name: '',
+            room: null,
             total:150,
             value: 95,
             room: {
