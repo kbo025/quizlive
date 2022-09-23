@@ -107,6 +107,18 @@ Start the server
 ```
 
 
+## Difficulties
+- Have to learn Neo4J
+- Little time to develop
+
+## Facilities
+- use Node
+- use vue, Nuxt and vuetify
+## TODO'S
+- Web sockets for the realtime
+- Best resport of student's results
+- JWT for security
+- User area with reports, update profile data and others
 ## Authors
 
 - [@kbo025](https://www.github.com/@kbo025)
